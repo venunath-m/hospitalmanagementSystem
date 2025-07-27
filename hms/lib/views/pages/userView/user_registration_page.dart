@@ -17,7 +17,9 @@ class UserRegistrationPage extends StatefulWidget {
     super.key,
     this.loggedInUserCompanyId,
     required this.loggedInUserCompanyName,
-  });
+  }) {
+    print("UserRegistrationPage widget created");
+  }
 
   @override
   State<UserRegistrationPage> createState() => _UserRegistrationPageState();
@@ -65,6 +67,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     FeatureToggles.categorized.forEach((category, features) {
       togglesState?[category] = Map<String, bool>.from(features);
     });
+    print("i am here but not visible");
   }
 
   @override
@@ -389,9 +392,10 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
               .toList()
         : [];
 
-    return Scaffold(
-      appBar: AppBar(title: Text('User Registration')),
-      body: Center(
+    return BackgroundScaffold(
+      appBar: CustomAppBar(title: 'User Registration'),
+      scrollable: false,
+      child: Center(
         child: SingleChildScrollView(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 500),
@@ -401,7 +405,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 borderRadius: BorderRadius.circular(16),
               ),
               margin: const EdgeInsets.all(16),
-              child: Padding(
+              child: Container(
+                color: Colors.white,
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [

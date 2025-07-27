@@ -9,7 +9,7 @@ class MainLayout extends StatefulWidget {
   const MainLayout({
     Key? key,
     required this.child,
-    this.title = "My Awesome App",
+    this.title = "Hospital Management System",
   }) : super(key: key);
 
   @override
@@ -62,7 +62,7 @@ class _MainLayoutState extends State<MainLayout> {
       ),
       bottomNavigationBar: const AppFooter(),
       scrollable: false,
-      child: Container(),
+      child: widget.child,
     );
   }
 }

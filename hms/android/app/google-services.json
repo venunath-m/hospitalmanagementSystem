@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "38047632301",
+    "firebase_url": "https://hmsappproject-default-rtdb.firebaseio.com",
+    "project_id": "hmsappproject",
+    "storage_bucket": "hmsappproject.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38047632301:android:6486aed71c26f28732af24",
+        "android_client_info": {
+          "package_name": "com.example.hms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDViK8xNsiiS6nCn6SCQNiGm9_urIu8L7E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

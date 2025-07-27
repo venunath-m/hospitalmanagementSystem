@@ -11,6 +11,8 @@ export 'shared_widgets/buildAnimatedButton.dart';
 export 'shared_widgets/background_scaffold.dart';
 export 'shared_widgets/GradientBackgroundWrapper.dart';
 export 'shared_widgets/CustomDateRangeButton.dart';
+export 'shared_widgets/UploadImageOrFileWidget.dart';
+export 'shared_widgets/builddraweroptionsWidget.dart';
 export '../service_utilities/ImageUploaderService.dart';
 export '../service_utilities/report_exporter.dart';
 export '../service_utilities/enums_utils.dart';

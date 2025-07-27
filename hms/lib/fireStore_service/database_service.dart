@@ -106,30 +106,27 @@ class FirestoreService {
       final usersSnapshot = await usersCollection.limit(1).get();
       if (usersSnapshot.docs.isEmpty) {
         final defaultPassword = 'password@123456@arianaGrande';
-        final hashedPassword = hashPassword(
-          defaultPassword,
-        ); // Hash the password
 
         final defaultUsers = [
           {
             'companyId': 1,
             'username': 'sparrow',
             'email': 'venunathm30@gmail.com',
-            'password': hashedPassword, // Use hash
+            'password': defaultPassword, // Use hash
             'userlevel': 'DevelopAdmin',
           },
           {
             'companyId': 1,
             'username': 'sparrowAdmin',
             'email': 'venunathm30@gmail.com',
-            'password': hashedPassword,
+            'password': defaultPassword,
             'userlevel': 'SuperAdmin',
           },
           {
             'companyId': 1,
             'username': 'sparrowStaff',
             'email': 'venunathm30@gmail.com',
-            'password': hashedPassword,
+            'password': defaultPassword,
             'userlevel': 'SaleStaff',
           },
         ];

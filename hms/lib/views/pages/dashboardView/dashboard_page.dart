@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hms/custom_component_widgets/shared_widgets.dart';
 import 'package:hms/fireStore_service/purchaseSummaryCollection_service.dart';
 import 'package:hms/fireStore_service/salesSummary_service.dart';
 import 'package:hms/fireStore_service/ledger_summary_service.dart';
@@ -294,8 +295,10 @@ class _DashboardPageState extends State<DashboardPage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return Scaffold(
-      body: Stack(
+    return BackgroundScaffold(
+      appBar: CustomAppBar(title: 'Dashboard'),
+       scrollable: false,
+      child: Stack(
         children: [
           Positioned.fill(
             child: Opacity(

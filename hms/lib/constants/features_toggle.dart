@@ -1,4 +1,8 @@
 // Refactored FeatureToggles class
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 class FeatureToggles {
   // Static Navigation Menu
   static Map<String, bool> mainMenu = {
@@ -106,6 +110,30 @@ class FeatureToggles {
     ...reportFeatures,
     ...settingFeatures,
   };
+  static Map<String, bool> getFeaturesForRole(String role) {
+    if (role == 'DevelopAdmin') {
+      return {for (var feature in allFeatures.keys) feature: true};
+    }
+    return mainMenu; // subset for others
+  }
+
+  static Future<Map<String, bool>> getFeaturesForUser(String role) async {
+    if (role == 'DevelopAdmin') {
+      return {for (var feature in allFeatures.keys) feature: true};
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    final featureListString = prefs.getString('userFeatures');
+    final enabledFeatures =
+        featureListString == null || featureListString.isEmpty
+        ? []
+        : List<String>.from(jsonDecode(featureListString));
+
+    // Build the map with true/false for all features
+    return {
+      for (var key in allFeatures.keys) key: enabledFeatures.contains(key),
+    };
+  }
 }
 
 // UI helper for feature toggles (widget example)

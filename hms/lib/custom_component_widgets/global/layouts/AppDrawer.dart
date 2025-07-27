@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hms/constants/features_toggle.dart';
 import 'package:provider/provider.dart';
 import 'package:hms/custom_component_widgets/shared_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -11,7 +13,7 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   bool _canAccessReports = false;
-
+  List<String> _userFeatures = [];
   @override
   void initState() {
     super.initState();
@@ -19,10 +21,15 @@ class _AppDrawerState extends State<AppDrawer> {
   }
 
   Future<void> _checkUserPermissions() async {
-    // Your permission logic here
-    await Future.delayed(const Duration(seconds: 1));
+    final prefs = await SharedPreferences.getInstance();
+    final role = prefs.getString('userlevel') ?? 'Guest';
+    final featureMap = await FeatureToggles.getFeaturesForUser(role);
+
     setState(() {
-      _canAccessReports = true;
+      _userFeatures = featureMap.entries
+          .where((entry) => entry.value)
+          .map((entry) => entry.key)
+          .toList();
     });
   }
 
@@ -88,32 +95,18 @@ class _AppDrawerState extends State<AppDrawer> {
                 ],
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.dashboard, color: contentColor),
-              title: Text("Dashboard", style: TextStyle(color: contentColor)),
-              onTap: () {
-                Navigator.pop(context);
-                // TODO: Navigate to Dashboard
-              },
-            ),
-            if (_canAccessReports)
-              ListTile(
-                leading: Icon(Icons.analytics, color: contentColor),
-                title: Text("Reports", style: TextStyle(color: contentColor)),
-                onTap: () {
-                  Navigator.pop(context);
-                  // TODO: Navigate to Reports
-                },
-              ),
-            ListTile(
-              leading: Icon(Icons.receipt_long, color: contentColor),
-              title: Text(
-                "Transactions",
-                style: TextStyle(color: contentColor),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                // TODO: Navigate to Transactions
+            FutureBuilder<List<Widget>>(
+              future: buildDrawerOptions(context),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return ListTile(title: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const ListTile(title: Text('No features available'));
+                } else {
+                  return Column(children: snapshot.data!);
+                }
               },
             ),
           ],

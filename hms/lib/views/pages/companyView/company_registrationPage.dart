@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart'; // Import Firebase Storage
+import 'package:hms/fireStore_service/customer_service.dart';
 import 'package:image_picker/image_picker.dart'; // Import Image Picker (For mobile platforms)
 import 'package:file_picker/file_picker.dart'; // Import File Picker (For Web)
 import 'package:intl/intl.dart';
@@ -498,9 +499,10 @@ class CompanyRegistrationPageState extends State<CompanyRegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Company Registration')),
-      body: Padding(
+    return BackgroundScaffold(
+      appBar: CustomAppBar(title: 'Company Registration'),
+      scrollable: false,
+      child: Padding(
         padding: const EdgeInsets.all(16),
         child: Center(
           child: SingleChildScrollView(

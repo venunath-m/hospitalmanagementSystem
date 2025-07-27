@@ -11,7 +11,7 @@ class AppFooter extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: const Center(
         child: Text(
-          "© 2025 My Awesome App. All rights reserved.",
+          "© 2025 Hospital Management System. All rights reserved.",
           style: TextStyle(fontSize: 12),
         ),
       ),
