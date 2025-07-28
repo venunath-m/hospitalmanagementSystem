@@ -25,6 +25,24 @@ class _PharmacySalesBillingPageState extends State<PharmacySalesBillingPage> {
       TextEditingController();
 
   final List<Map<String, dynamic>> salesItems = [];
+  DateTime billEntryDate = DateTime.now();
+  DateTime accountingDate =
+      DateTime.now(); // Or however you get the correct accounting date
+  final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+
+  Future<void> _pickBillEntryDate(BuildContext context) async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: billEntryDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        billEntryDate = picked;
+      });
+    }
+  }
 
   // Dummy medicine master list with chemical names
   final List<Map<String, String>> medicineMasterList = [
@@ -244,7 +262,35 @@ class _PharmacySalesBillingPageState extends State<PharmacySalesBillingPage> {
                 ],
               ),
               const SizedBox(height: 12),
-
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => _pickBillEntryDate(context),
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          labelText: 'Bill Entry Date',
+                          border: OutlineInputBorder(),
+                        ),
+                        child: Text(dateFormat.format(billEntryDate)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  // Accounting Date - disabled
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Accounting Date',
+                        border: OutlineInputBorder(),
+                      ),
+                      initialValue: dateFormat.format(accountingDate),
+                      enabled: false, // disables editing
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
               // Patient Name
               TextFormField(
                 controller: patientNameController,
@@ -497,7 +543,7 @@ class _PharmacySalesBillingPageState extends State<PharmacySalesBillingPage> {
                   border: OutlineInputBorder(),
                 ),
                 value: billingType,
-                items: ['Cash', 'Credit'].map((type) {
+                items: ['Cash', 'Credit', 'Bank', 'UPI'].map((type) {
                   return DropdownMenuItem(value: type, child: Text(type));
                 }).toList(),
                 onChanged: (val) {

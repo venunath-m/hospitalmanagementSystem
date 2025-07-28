@@ -9,6 +9,7 @@ import 'package:hms/views/pages/hospitalFacilities/HospitalFacilitiesPage.dart';
 import 'package:hms/views/pages/inventory/inventory_page.dart';
 import 'package:hms/views/pages/lab/lab_page.dart';
 import 'package:hms/views/pages/patients/patientsPage.dart';
+import 'package:hms/views/pages/pharmacy/pharmacy_dashboard_page.dart';
 import 'package:hms/views/pages/pharmacy/pharmacy_page.dart';
 import 'package:hms/views/pages/reports/reports_page.dart';
 import 'package:hms/views/pages/settings/settings_page.dart';
@@ -25,7 +26,7 @@ class AppRoutes {
     '/doctors': (context) => MainLayout(child: DoctorsPage()),
     '/billing': (context) => MainLayout(child: HospitalBillingPage()),
     '/inventory': (context) => MainLayout(child: InventoryPage()),
-    '/pharmacy': (context) => MainLayout(child: PharmacyPage()),
+    '/pharmacy': (context) => MainLayout(child: PharmacyDashboardPage()),
     '/lab': (context) => MainLayout(child: LabPage()),
     '/reports': (context) => MainLayout(child: ReportsPage()),
     '/settings': (context) => MainLayout(child: SettingsPage()),

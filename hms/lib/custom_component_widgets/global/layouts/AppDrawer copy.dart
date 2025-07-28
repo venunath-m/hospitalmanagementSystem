@@ -14,20 +14,10 @@ class AppDrawer extends StatefulWidget {
 class _AppDrawerState extends State<AppDrawer> {
   bool _canAccessReports = false;
   List<String> _userFeatures = [];
-  bool _isLoggedIn = false;
   @override
   void initState() {
     super.initState();
     _checkUserPermissions();
-    _checkLoginStatus();
-  }
-
-  Future<void> _checkLoginStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('authToken'); // or any user login indicator
-    setState(() {
-      _isLoggedIn = token != null && token.isNotEmpty;
-    });
   }
 
   Future<void> _checkUserPermissions() async {
@@ -122,35 +112,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const ListTile(title: Text('No features available'));
                 } else {
-                  return Column(
-                    children: snapshot.data!.map((widget) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 6,
-                          horizontal: 16,
-                        ), // space between items horizontally & vertically
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 12,
-                          ), // padding inside red bg
-                          decoration: BoxDecoration(
-                            color: Colors.red.shade800,
-                            borderRadius: BorderRadius.circular(
-                              8,
-                            ), // rounded corners for nicer look
-                          ),
-                          child: IconTheme(
-                            data: const IconThemeData(color: Colors.white),
-                            child: DefaultTextStyle(
-                              style: const TextStyle(color: Colors.white),
-                              child: widget,
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  );
+                  return Column(children: snapshot.data!);
                 }
               },
             ),
