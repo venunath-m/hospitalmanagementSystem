@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:hms/custom_component_widgets/shared_widgets.dart';
 import 'package:hms/fireStore_service/companiesCollection_service.dart';
 import 'package:hms/fireStore_service/userCollection_service.dart';
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRegistrationPage extends StatefulWidget {
@@ -18,7 +16,7 @@ class UserRegistrationPage extends StatefulWidget {
     this.loggedInUserCompanyId,
     required this.loggedInUserCompanyName,
   }) {
-    print("UserRegistrationPage widget created");
+    //print("UserRegistrationPage widget created");
   }
 
   @override
@@ -67,7 +65,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     FeatureToggles.categorized.forEach((category, features) {
       togglesState?[category] = Map<String, bool>.from(features);
     });
-    print("i am here but not visible");
   }
 
   @override
@@ -461,34 +458,24 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                               setState(() {});
                             },
                           )
-                        : DropdownButtonFormField<String>(
-                            value: userlevelController.text.isNotEmpty
+                        : FlexibleDropdown<String>(
+                            items: const [
+                              'SuperAdmin',
+                              'ServiceStaff',
+                              'Doctor',
+                              'Patient',
+                            ],
+                            selectedId: userlevelController.text.isNotEmpty
                                 ? userlevelController.text
                                 : null,
-                            items: const [
-                              DropdownMenuItem(
-                                value: 'SuperAdmin',
-                                child: Text('SuperAdmin'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'ServiceStaff',
-                                child: Text('ServiceStaff'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Doctor',
-                                child: Text('Doctor'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Patient',
-                                child: Text('Patient'),
-                              ),
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'User Level',
-                              border: OutlineInputBorder(),
-                            ),
-                            onChanged: (value) {
-                              userlevelController.text = value!;
+                            label: 'User Level',
+                            idSelector: (val) => val,
+                            displaySelector: (val) => val,
+                            onChanged: (value) async {
+                              userlevelController.text = value ?? '';
+                              if (value == 'DevelopAdmin') {
+                                await fetchCompanies();
+                              }
                               setState(() {});
                             },
                           ),

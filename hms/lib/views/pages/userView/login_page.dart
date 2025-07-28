@@ -198,12 +198,7 @@ class _LoginPageState extends State<LoginPage> {
           //await FirestoreService().initializeDefaults();
 
           // Navigate to Dashboard
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => MainLayout(child: DashboardPage()),
-            ),
-          );
+          Navigator.pushReplacementNamed(context, '/dashboard');
         } else {
           await _showErrorMessage(context, "Please enter Valid Credentials!");
         }

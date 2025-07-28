@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
@@ -103,40 +104,8 @@ class FirestoreService {
   // Optionally initialize default documents (e.g., for development or setup)
   Future<void> initializeDefaults() async {
     try {
-      final usersSnapshot = await usersCollection.limit(1).get();
-      if (usersSnapshot.docs.isEmpty) {
-        final defaultPassword = 'password@123456@arianaGrande';
-
-        final defaultUsers = [
-          {
-            'companyId': 1,
-            'username': 'sparrow',
-            'email': 'venunathm30@gmail.com',
-            'password': defaultPassword, // Use hash
-            'userlevel': 'DevelopAdmin',
-          },
-          {
-            'companyId': 1,
-            'username': 'sparrowAdmin',
-            'email': 'venunathm30@gmail.com',
-            'password': defaultPassword,
-            'userlevel': 'SuperAdmin',
-          },
-          {
-            'companyId': 1,
-            'username': 'sparrowStaff',
-            'email': 'venunathm30@gmail.com',
-            'password': defaultPassword,
-            'userlevel': 'SaleStaff',
-          },
-        ];
-
-        for (final user in defaultUsers) {
-          await usersCollection.add(user);
-        }
-
-        debugPrint('Default users added with hashed passwords.');
-      }
+      // Step 1: Create default company if none exists
+      String? companyId;
 
       final companiesSnapshot = await companiesCollection.limit(1).get();
       if (companiesSnapshot.docs.isEmpty) {
@@ -148,10 +117,66 @@ class FirestoreService {
         };
 
         final companyDoc = await companiesCollection.add(defaultCompany);
-        debugPrint('Default company created with ID: ${companyDoc.id}');
+        companyId = companyDoc.id;
+        debugPrint('✅ Default company created with ID: $companyId');
+      } else {
+        companyId = companiesSnapshot.docs.first.id;
+        debugPrint('✅ Using existing company ID: $companyId');
+      }
+
+      // Step 2: Create users only if none exist
+      final usersSnapshot = await usersCollection.limit(1).get();
+      if (usersSnapshot.docs.isEmpty && companyId != null) {
+        final defaultPassword = 'password@123456@arianaGrande';
+
+        final defaultUsers = [
+          {
+            'username': 'sparrow',
+            'email': 'venunathm30dev@gmail.com',
+            'userlevel': 'DevelopAdmin',
+          },
+          {
+            'username': 'sparrowAdmin',
+            'email': 'venunathm30dev@gmail.com',
+            'userlevel': 'SuperAdmin',
+          },
+          {
+            'username': 'sparrowStaff',
+            'email': 'venunathm30dev@gmail.com',
+            'userlevel': 'SaleStaff',
+          },
+        ];
+
+        for (final user in defaultUsers) {
+          try {
+            // Step 2.1: Create Firebase Auth user
+            final authResult = await FirebaseAuth.instance
+                .createUserWithEmailAndPassword(
+                  email: user['email']!,
+                  password: defaultPassword,
+                );
+            final uid = authResult.user!.uid;
+
+            // Step 2.2: Save user details to Firestore with UID as doc ID
+            final userData = {
+              'companyId': companyId,
+              'username': user['username'],
+              'email': user['email'],
+              'userlevel': user['userlevel'],
+              'uid': uid,
+              'password': '', // Do not store password
+              'features': [''],
+            };
+
+            await usersCollection.doc(uid).set(userData);
+            debugPrint('✅ Created user ${user['username']} with UID $uid');
+          } catch (e) {
+            debugPrint('⚠️ Failed to create user ${user['username']}: $e');
+          }
+        }
       }
     } catch (e, stackTrace) {
-      debugPrint('Error initializing default Firestore data: $e');
+      debugPrint('❌ Error initializing default Firestore data: $e');
       debugPrint('StackTrace: $stackTrace');
     }
   }

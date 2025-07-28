@@ -7,7 +7,7 @@ class ReportsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundScaffold(
-      appBar: CustomAppBar(title: 'Reports'),
+      appBar: CustomAppBar(title: 'Reports', showBackButton: true),
       scrollable: false,
       child: const Center(
         child: Text(

@@ -4,4 +4,7 @@ const List<String> backgroundOptions = [
   'assets/backgrounds/bg3.png',
   'assets/backgrounds/bg4.png',
   'assets/backgrounds/bg5.png',
+  'assets/backgrounds/bgv1.mp4',
+  'assets/backgrounds/bgv2.mp4',
+  'assets/backgrounds/bgv3.mp4',
 ];

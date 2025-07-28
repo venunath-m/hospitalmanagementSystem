@@ -60,17 +60,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           if (Scaffold.of(context).hasDrawer) {
             return IconButton(
               icon: Icon(Icons.menu, color: effectiveIconColor),
-              onPressed: () {
-                scaffoldKey?.currentState?.openDrawer();
-              },
+              onPressed: () => Scaffold.of(context).openDrawer(),
             );
           }
 
-          if (showBackButton) {
-            return BackButton(color: effectiveIconColor);
+          if (showBackButton && Navigator.canPop(context)) {
+            return IconButton(
+              icon: Icon(Icons.arrow_back, color: effectiveIconColor),
+              onPressed: () => Navigator.pop(context),
+            );
           }
 
-          return Container();
+          return const SizedBox();
         },
       ),
 

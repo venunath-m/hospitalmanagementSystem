@@ -19,9 +19,11 @@ final Map<String, Future<void> Function(BuildContext)> specialActions = {
   },
 };
 
-Future<List<Widget>> buildDrawerOptions(BuildContext context) async {
-  final theme = Theme.of(context);
-  final contentColor = theme.textTheme.titleLarge?.color ?? Colors.black87;
+Future<List<Widget>> buildDrawerOptions(
+  BuildContext context,
+  Color contentColor,
+  bool isDark,
+) async {
   final List<Widget> options = [];
 
   final prefs = await SharedPreferences.getInstance();
@@ -35,14 +37,28 @@ Future<List<Widget>> buildDrawerOptions(BuildContext context) async {
 
     if (featureToRoute.containsKey(feature)) {
       final route = featureToRoute[feature]!;
+
       options.add(
         ListTile(
           leading: Icon(getIconForFeature(feature), color: contentColor),
-          title: Text(feature, style: TextStyle(color: contentColor)),
+          title: Text(
+            feature,
+            style: TextStyle(
+              color: contentColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              shadows: [
+                Shadow(
+                  blurRadius: 2,
+                  offset: Offset(1, 1),
+                  color: isDark ? Colors.black45 : Colors.white60,
+                ),
+              ],
+            ),
+          ),
           onTap: () {
-            print('Navigating to route: $route for feature: $feature');
             Navigator.pop(context);
-            Navigator.of(context).pushReplacementNamed(route);
+            Navigator.of(context).pushNamed(route);
           },
         ),
       );
@@ -50,11 +66,22 @@ Future<List<Widget>> buildDrawerOptions(BuildContext context) async {
       options.add(
         ListTile(
           leading: Icon(getIconForFeature(feature), color: contentColor),
-          title: Text(feature, style: TextStyle(color: contentColor)),
+          title: Text(
+            feature,
+            style: TextStyle(
+              color: contentColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              shadows: [
+                Shadow(
+                  blurRadius: 2,
+                  offset: Offset(1, 1),
+                  color: isDark ? Colors.black45 : Colors.white60,
+                ),
+              ],
+            ),
+          ),
           onTap: () async {
-            print(
-              'Executing special action for feature: $feature',
-            ); // <-- Debug print
             Navigator.pop(context);
             await specialActions[feature]!(context);
           },
@@ -62,5 +89,6 @@ Future<List<Widget>> buildDrawerOptions(BuildContext context) async {
       );
     }
   }
+
   return options;
 }

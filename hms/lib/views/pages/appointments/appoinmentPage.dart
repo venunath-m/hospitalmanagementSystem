@@ -1,49 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:hms/custom_component_widgets/shared_widgets.dart';
+import 'package:hms/views/pages/appointments/AppointmentBookingPage.dart';
+import 'package:hms/views/pages/appointments/AppointmentListingPage.dart';
 
-class AppointmentsPage extends StatelessWidget {
-  const AppointmentsPage({Key? key}) : super(key: key);
+class AppointmentsPage extends StatefulWidget {
+  const AppointmentsPage({super.key});
+
+  @override
+  State<AppointmentsPage> createState() => _AppointmentsPageState();
+}
+
+class _AppointmentsPageState extends State<AppointmentsPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BackgroundScaffold(
       appBar: CustomAppBar(title: 'Appointments'),
       scrollable: false,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              'Manage your appointments here',
-              style: Theme.of(context).textTheme.titleLarge,
+      child: Column(
+        children: [
+          Container(
+            color: Colors.red.shade800,
+            child: TabBar(
+              controller: _tabController,
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.white70,
+              tabs: const [
+                Tab(text: 'Book Appointment'),
+                Tab(text: 'Appointment List'),
+              ],
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Add your booking logic or navigate to booking screen
-              },
-              child: const Text('Book New Appointment'),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: const [
+                // Just widgets here — no Scaffold or AppBar inside
+                AppointmentBookingPage(),
+                AppointmentListingPage(),
+              ],
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView(
-                children: const [
-                  ListTile(
-                    leading: Icon(Icons.calendar_today),
-                    title: Text('Appointment with Dr. Smith'),
-                    subtitle: Text('Date: 2025-08-01, 10:00 AM'),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.calendar_today),
-                    title: Text('Appointment with Dr. Lee'),
-                    subtitle: Text('Date: 2025-08-03, 02:00 PM'),
-                  ),
-                  // Add more dummy or dynamic appointments here
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

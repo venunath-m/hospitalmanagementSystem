@@ -40,7 +40,7 @@ class _AppDrawerState extends State<AppDrawer> {
     final bgImage = themeProvider.selectedBackground;
     final theme = Theme.of(context);
     // Text and icon colors adapt to theme
-    final contentColor = theme.textTheme.titleLarge?.color ?? Colors.black87;
+    final contentColor = isDark ? Colors.white : Colors.black;
 
     return Drawer(
       backgroundColor: isDark ? Colors.grey[900] : Colors.white,
@@ -85,10 +85,17 @@ class _AppDrawerState extends State<AppDrawer> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      "Menu",
+                      "NagaSoft Solutions",
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: contentColor,
                         fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 2,
+                            offset: Offset(1, 1),
+                            color: isDark ? Colors.black : Colors.white,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -96,7 +103,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ),
             ),
             FutureBuilder<List<Widget>>(
-              future: buildDrawerOptions(context),
+              future: buildDrawerOptions(context, contentColor, isDark),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());

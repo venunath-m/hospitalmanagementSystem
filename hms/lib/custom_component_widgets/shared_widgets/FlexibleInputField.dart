@@ -36,7 +36,7 @@ class _FlexibleInputFieldState extends State<FlexibleInputField> {
   void initState() {
     super.initState();
     if (widget.fieldType == FieldType.phone) {
-      _phoneNumber = PhoneNumber(isoCode: 'US');
+      _phoneNumber = PhoneNumber(isoCode: 'IN');
     }
   }
 

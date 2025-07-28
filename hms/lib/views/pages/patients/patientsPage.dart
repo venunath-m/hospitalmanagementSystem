@@ -1,59 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:hms/custom_component_widgets/shared_widgets.dart';
+import 'package:hms/views/pages/patients/AdmissionsPage.dart';
+import 'package:hms/views/pages/patients/DischargesPage.dart';
+import 'package:hms/views/pages/patients/MedicalRecordsPage.dart';
+import 'package:hms/views/pages/patients/PatientListPage.dart';
+import 'package:hms/views/pages/patients/PatientRegistrationPage.dart';
+import 'package:hms/views/pages/patients/VitalsPage.dart';
 
-class PatientsPage extends StatelessWidget {
-  const PatientsPage({Key? key}) : super(key: key);
+class PatientsPage extends StatefulWidget {
+  const PatientsPage({super.key});
+
+  @override
+  State<PatientsPage> createState() => _PatientsPageState();
+}
+
+class _PatientsPageState extends State<PatientsPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 6, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Dummy patient data - replace with real data later
-    final List<Map<String, String>> patients = [
-      {'name': 'John Doe', 'id': 'P001', 'phone': '123-456-7890'},
-      {'name': 'Jane Smith', 'id': 'P002', 'phone': '987-654-3210'},
-      {'name': 'Alice Johnson', 'id': 'P003', 'phone': '555-123-4567'},
-    ];
-
     return BackgroundScaffold(
-      appBar: CustomAppBar(title: 'Patients'),
+      appBar: CustomAppBar(title: 'Patient Management'),
       scrollable: false,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              'List of registered patients',
-              style: Theme.of(context).textTheme.titleLarge,
+      child: Column(
+        children: [
+          Container(
+            color: Colors.red.shade800,
+            child: TabBar(
+              controller: _tabController,
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.white70,
+              tabs: const [
+                Tab(text: 'Registration'),
+                Tab(text: 'Patient List'),
+                Tab(text: 'Medical Records'),
+                Tab(text: 'Vitals'),
+                Tab(text: 'Admissions'),
+                Tab(text: 'Discharges'),
+              ],
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Navigate to patient registration form page
-              },
-              child: const Text('Register New Patient'),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: const [
+                // Just widgets here — no Scaffold or AppBar inside
+                PatientRegistrationPage(),
+                PatientListPage(),
+                MedicalRecordsPage(),
+                VitalsPage(),
+                AdmissionsPage(),
+                DischargesPage(),
+              ],
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: patients.length,
-                itemBuilder: (context, index) {
-                  final patient = patients[index];
-                  return Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.person),
-                      title: Text(patient['name']!),
-                      subtitle: Text(
-                        'ID: ${patient['id']} - Phone: ${patient['phone']}',
-                      ),
-                      onTap: () {
-                        // TODO: Navigate to patient details or edit page
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

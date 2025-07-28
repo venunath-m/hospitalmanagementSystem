@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hms/custom_component_widgets/global/layouts/MainLayout.dart';
+import 'package:hms/main.dart';
 import 'package:hms/views/pages/appointments/appoinmentPage.dart';
 import 'package:hms/views/pages/billing/billing_page.dart';
 import 'package:hms/views/pages/dashboardView/dashboard_page.dart';
 import 'package:hms/views/pages/doctors/doctorsPage.dart';
+import 'package:hms/views/pages/hospitalFacilities/HospitalFacilitiesPage.dart';
 import 'package:hms/views/pages/inventory/inventory_page.dart';
 import 'package:hms/views/pages/lab/lab_page.dart';
 import 'package:hms/views/pages/patients/patientsPage.dart';
@@ -21,12 +23,12 @@ class AppRoutes {
     '/appointments': (context) => MainLayout(child: AppointmentsPage()),
     '/patients': (context) => MainLayout(child: PatientsPage()),
     '/doctors': (context) => MainLayout(child: DoctorsPage()),
-    '/billing': (context) => MainLayout(child: BillingPage()),
+    '/billing': (context) => MainLayout(child: HospitalBillingPage()),
     '/inventory': (context) => MainLayout(child: InventoryPage()),
     '/pharmacy': (context) => MainLayout(child: PharmacyPage()),
     '/lab': (context) => MainLayout(child: LabPage()),
-    '/reports': (context) => ReportsPage(),
-    '/settings': (context) => SettingsPage(),
+    '/reports': (context) => MainLayout(child: ReportsPage()),
+    '/settings': (context) => MainLayout(child: SettingsPage()),
     '/login': (context) => LoginPage(),
     '/signup': (context) => MainLayout(
       child: UserRegistrationPage(
@@ -34,6 +36,8 @@ class AppRoutes {
         loggedInUserCompanyName: 'Default Company',
       ),
     ),
+    '/hospitalFacilities': (context) =>
+        MainLayout(child: HospitalFacilitiesPage()),
   };
 }
 
@@ -50,6 +54,7 @@ final Map<String, String> featureToRoute = {
   'Settings': '/settings',
   'Login': '/login',
   'SignUp': '/signup',
+  'Hospital Facilities': '/hospitalFacilities',
   // Add Logout only if you handle it specially, no route needed
 };
 
@@ -82,6 +87,8 @@ IconData getIconForFeature(String feature) {
       return Icons.logout;
     case 'SignUp':
       return Icons.person_add;
+    case 'Hospital Facilities':
+      return Icons.domain; // or any other relevant icon
     default:
       return Icons.help_outline;
   }

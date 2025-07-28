@@ -19,6 +19,7 @@ class FeatureToggles {
     'Login': true,
     'Logout': true,
     'SignUp': true,
+    'Hospital Facilities': true,
   };
 
   // Grouped Feature Toggles
